@@ -41,7 +41,7 @@ boolean dealCardTo(Player p)
     
   int rand = 0; //random card rando(decksize)  //X = (int)random(width/3-300,width/3+300), randY = (int)random(height/1.3-0,height/1.3+0);
   
-  //add card to p's hand    ArrayList.add();
+  if(deck.card.add  //add card to p's hand    ArrayList.add();
   //remove same card from deck  ArrayList.remove();
   
   return true;
