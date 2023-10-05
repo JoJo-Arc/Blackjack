@@ -56,7 +56,7 @@ class Card
 
   public String toString()
   {
-    return valueToString(value) + " of " + typeToString(suit);
+    return valueToString(value) + " of " + typeToString(suit) + " " + min(10,value);
   }
 
   public String typeToString( CardType t )

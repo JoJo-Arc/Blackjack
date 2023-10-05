@@ -19,18 +19,24 @@ text("chipWhite =", 40, 40);
 void draw()
 {
 
-  {
-    //Draw pile
-    rectMode(CENTER);
-    textAlign(CENTER);
+  //Draw pile
+  rectMode(CENTER);
+  textAlign(CENTER);
 
-    strokeWeight(10);
-    fill(255);
-    rect(width-200, height-300, 200, 300, 10);
-    textSize(50);
-    fill(0);
+  strokeWeight(10);
+  fill(255);
+  rect(width-200, height-300, 200, 300, 10);
+  textSize(50);
+  fill(0);
 
-  }
+  for(int i = 0; i < steve.hand.size(); i++)
+    circle(50+100*i,50,50);
+    
+    
+    
+  text( deck.card.size(), width-200, height-300);
+  
+  
 }
 
 
@@ -38,10 +44,13 @@ boolean dealCardTo(Player p)
 {
   if( deck.card.size() == 0)
     return false;
-    
-  int rand = 0; //random card rando(decksize)  //X = (int)random(width/3-300,width/3+300), randY = (int)random(height/1.3-0,height/1.3+0);
-  
-  if(deck.card.add  //add card to p's hand    ArrayList.add();
+  //int randX = (int)random(width/3-300,width/3+300), randY = (int)random(height/1.3-0,height/1.3+0);
+  int rand = (int)random(deck.card.size()); //random card rando(decksize)  //X = (int)random(width/3-300,width/3+300), randY = (int)random(height/1.3-0,height/1.3+0);
+  steve.hand.add( new Card( deck.card.get(rand) ) );
+  deck.card.remove(rand);
+ 
+ // if(
+  //if(deck.card.add  //add card to p's hand    ArrayList.add();
   //remove same card from deck  ArrayList.remove();
   
   return true;
@@ -49,8 +58,7 @@ boolean dealCardTo(Player p)
 
 void mousePressed()
 {
-   println(mouseX+" "+mouseY);
-
+   //println(mouseX+" "+mouseY);
 
   
   if( mouseX > width-300
@@ -59,10 +67,11 @@ void mousePressed()
    && mouseY < height - 150
    && deck.card.size() > 0 )
   {
-//    int randX = (int)random(width/3-300,width/3+300), randY = (int)random(height/1.3-0,height/1.3+0);
-   // dealCardto( steve );
-//    deck.card.remove(0);
+  //  int randX = (int)random(width/3-300,width/3+300), randY = (int)random(height/1.3-0,height/1.3+0);
+    dealCardTo( steve );
+    deck.card.remove(0);
   }
+   println( steve.hand );
 }
 
 void keyPressed()
