@@ -13,6 +13,15 @@ class Player
   int chipGreen =0;
   int chipBlack =0;
   
+  int handValue()
+  {
+    int totalValue = 0;
+    
+    for( int i = 0; i < hand.size(); i++ )
+      totalValue += hand.get(i).value();
+      
+    return totalValue;
+  }
   
 }
 

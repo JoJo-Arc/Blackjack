@@ -5,6 +5,9 @@ class Card
   color cardColor;
   float cardX,cardY;
   boolean grabbed;
+  boolean worth11;
+  
+  boolean reduced; //for aces that have become worth 1
 
   public Card( CardType s, int v )
   {
@@ -39,19 +42,31 @@ class Card
     strokeWeight(10);
     fill(255);
     rect(x, y, 200, 300, 10);
+    drawSymbol( suit, x, y );
 
     //Draw numbers and symbol
-    textMode(CENTER);
+    textAlign(CENTER);
     imageMode(CENTER);
     textSize(30);
     push();
     translate(x, y);
     //drawSymbol( suit );
     fill(cardColor);
-  text(valueToChar(value), -80, -110);
+    text(valueToChar(value), -80, -110);
     rotate(PI);
-  text(valueToChar(value), -80, -110);
+    text(valueToChar(value), -80, -110);
     pop();
+  }
+  
+  int value()
+  {
+    if( value > 10 )
+      return 10;
+    if( value == 1 && !reduced )//&& steve.handValue() <= 10 )
+      return 11;
+    //else if( value == 1 && steve.handValue() >= 10)
+    //  return 1;
+    return value;
   }
 
   public String toString()
@@ -115,28 +130,32 @@ class Card
       return "X"; //Joker
     default:
       return ""+(char)(v+48);
+      
+      
     }
   }
 
-  //void drawSymbol( CardType s )
-  //{
-  //  switch(s)
-  //  {
-  //  case HEART:
-  //    image(d, 0, 0);
-  //    break;
-  //  case SPADE:
-  //    image(sc, 0, 0);
-  //    break;
-  //  case DIAMOND:
-  //    image(v, 0, 0);
-  //    break;
-  //  case CLUB:
-  //    image(f, 0, 0);
-  //    break;
-  //  }
-  //}
+  void drawSymbol( CardType s, float x, float y)
+  {
+    switch(s)
+    {
+    case HEART:
+      image(heart, x, y);
+      break;
+    case SPADE:
+      image(spade, x, y);
+      break;
+    case DIAMOND:
+      image(diamond, x, y);
+      break;
+    case CLUB:
+      image(club, x, y);
+      break;
+    }
+  }
 }
+//
+//
 
 public enum CardType
 {

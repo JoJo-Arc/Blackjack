@@ -1,4 +1,4 @@
-
+ 
 class Deck
 {
   ArrayList<Card> card = new ArrayList<Card>();
