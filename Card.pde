@@ -37,6 +37,7 @@ class Card
   public void drawCard( int x, int y )
   {
     //Draw card
+    imageMode(CENTER);
     rectMode(CENTER);
     stroke(cardColor);
     strokeWeight(10);
@@ -46,7 +47,6 @@ class Card
 
     //Draw numbers and symbol
     textAlign(CENTER);
-    imageMode(CENTER);
     textSize(30);
     push();
     translate(x, y);

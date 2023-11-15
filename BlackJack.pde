@@ -4,6 +4,7 @@ PImage spade;
 PImage club;
 PImage diamond;
 PImage heart;
+PImage cardBack;
 
 Deck deck = new Deck();
 Player steve = new Player();
@@ -24,6 +25,11 @@ void setup()
   heart = loadImage("heart.png"); 
   heart.resize(200, 0);
   
+  //Deck Pictures
+  cardBack =loadImage("cardBack.png");
+  //image(cardBack,100,100);
+  
+  
   //textSize(25);
   //text(steve.hand.value,400,400);
   //  size(400, 400);
@@ -33,7 +39,10 @@ void setup()
 
   deck.fill52CardDeck();
   print(deck.card);
+  background(#05F532);
   
+  fill(0,0,0,0);
+rect(890, 540, 220, 320);
   
 }
 void draw()
@@ -54,13 +63,13 @@ void draw()
     boolean noAces = true;
     for(int i =0; i < steve.hand.size() && noAces; i++)
     {
-      if( steve.hand.get(i).value == 11 )
+      if( steve.hand.get(i).value() == 11 )
       {
         steve.hand.get(i).reduced = true;
         noAces = false;
       }
     }
-    println(noAces);
+    //println(noAces);
     if( noAces )
     {
       busted = true;
