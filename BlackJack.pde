@@ -8,12 +8,11 @@ PImage club;
 PImage diamond;
 PImage heart;
 PImage cardBack;
-
+PImage greenFelt;
 
 Deck deck = new Deck();
 Player steve = new Player();
 Player dealer = new Player();
-
 
 boolean busted;
 boolean stayed;
@@ -26,7 +25,12 @@ SoundFile cardEffect;
 void setup()
 {
   size(1200, 1000);
+  
+  //background
+    
+  //background(greenFelt);
       imageMode(CENTER);
+      
   //Suit Pictures
   spade = loadImage("spade.png");    
   spade.resize(200, 0);
@@ -36,20 +40,13 @@ void setup()
   diamond.resize(200, 0);
   heart = loadImage("heart.png"); 
   heart.resize(200, 0);
+  greenFelt = loadImage("feltGreen.jpg");   
+  greenFelt.resize(1200,1000);
 
   
   //Deck Pictures
   cardBack =loadImage("cardBack.jpg");
 
-
-//  text(,800,600);
-  
-  //textSize(25);
-  //text(steve.hand.value,400,400);
-  //  size(400, 400);
-
-  //text( steve.whiteChip ,180, 40);
-  //size(800,800);
 
   deck.fill52CardDeck();
   print(deck.card);
@@ -57,8 +54,6 @@ void setup()
   
   fill(0,0,0,0);
 rect(890, 540, 220, 320);
-
-
 
 //the card image 
   cardBack.resize(200,0);
@@ -69,14 +64,20 @@ rect(890, 540, 220, 320);
 }
 void draw()
 {
-  background(#05F532);
+  image(greenFelt,600,500);
+  //background(#05F532);
   //Draw pile
   rectMode(CENTER);
   textAlign(CENTER);
 
-  strokeWeight(10);
-  fill(255);
-  rect(width-200, height-300, 200, 280, 10);
+  strokeWeight(5);
+  stroke(50);
+  fill(0);
+  for( int i = 0; i < deck.card.size()/2; i++)
+  {
+    stroke(50+20*(i%2));
+    rect(width-200-i, height-300-i, 210, 290, 10);
+  }
   textSize(50);
   fill(0);
   
@@ -102,13 +103,10 @@ void draw()
   for (int i = 0; i < steve.hand.size(); i++)
     steve.hand.get(i).drawCard(100+200*i,150);    
 
-  //circle(50+100*i,50,50);
-
   fill(0);
-  //textSize(100);
-  text( deck.card.size(), width-200, 900);
 
-    image(cardBack,width-200, height-300);
+  text( deck.card.size(), width-200, 900);
+  image(cardBack,width-200-deck.card.size()/2, height-300-deck.card.size()/2);
 
   //Stay Button
   rectMode(CORNER);
@@ -133,10 +131,6 @@ void draw()
     
   }
 }
-
-
-
-
 
 boolean dealCardTo(Player p)  //make this deal to p instead of steve
 {
