@@ -1,5 +1,15 @@
 // list Dealer Wins out of 10:1,3,4, player won :2,5,6,7,8,9,10
 
+/*
+White chips, $1
+Red chips, $5
+Blue chips, $10
+Green chips, $25
+Black chips, $100
+*/
+
+
+
 //New Prog
 
 //images 
@@ -9,6 +19,9 @@ PImage diamond;
 PImage heart;
 PImage cardBack;
 PImage greenFelt;
+PImage moneyCat;
+PImage c1, c2;
+
 
 Deck deck = new Deck();
 Player steve = new Player();
@@ -17,6 +30,9 @@ Player dealer = new Player();
 boolean busted;
 boolean stayed;
 boolean handOver;
+
+int gameState;
+
 
 import processing.sound.*;
 
@@ -40,12 +56,17 @@ void setup()
   diamond.resize(200, 0);
   heart = loadImage("heart.png"); 
   heart.resize(200, 0);
+  //the background
   greenFelt = loadImage("feltGreen.jpg");   
   greenFelt.resize(1200,1000);
-
-  
+  //thats money cat
+  moneyCat = loadImage("moneyCat.png");
+  moneyCat.resize(130, 0);
   //Deck Pictures
   cardBack =loadImage("cardBack.jpg");
+  //chips
+  c1 = loadImage("chipWhite.png");
+  c2 = loadImage("chipColor.png");
 
 
   deck.fill52CardDeck();
@@ -53,17 +74,20 @@ void setup()
   //background(#05F532);
   
   fill(0,0,0,0);
-rect(890, 540, 220, 320);
+  rect(890, 540, 220, 320);
 
-//the card image 
+  //the card image 
   cardBack.resize(200,0);
   
   //sound
   cardEffect = new SoundFile(this, "CardSoundEffect.wav");
   
+  //String WhiteChip = chipWhite;
 }
 void draw()
 {
+
+    
   image(greenFelt,600,500);
   //background(#05F532);
   //Draw pile
@@ -110,8 +134,10 @@ void draw()
 
   //Stay Button
   rectMode(CORNER);
-  rect(150, 450 ,75, 50);
   
+  //this box marks the click area to end the hand
+  //rect(120, 450 ,75, 50);
+  image(moneyCat,160, 470);
   //Dealer drawing cards
   if( stayed )
   {
@@ -120,7 +146,28 @@ void draw()
       dealCardTo(dealer);
       println(dealer.handValue());
     }
-    handOver = true;
+    
+    //prints loss on clicking money cat
+    
+    //LOSS
+     if (dealer.handValue() > steve.handValue())
+       text("loss",400,400);
+         handOver = true;
+           gameState = -1;
+     if (dealer.handValue() >= 22)
+       gameState  = -1;
+    //WIN
+     if (dealer.handValue() < steve.handValue())
+       text("win",400,400);
+         handOver = true;
+           gameState = 1;
+    //TIE
+     if (dealer.handValue() == steve.handValue())
+       text("Tie",400,400);
+         handOver = true;
+           gameState = 0;
+     
+
   }
   
   if( handOver )
@@ -128,8 +175,18 @@ void draw()
     textSize(25);
     text( "PLAYER: "+ steve.handValue(), 100, 390 );
     text( "DEALER: "+ dealer.handValue(), 100, 440);
-    
   }
+ // text("$" + steve.chipsAsCash(),900,500);
+
+  //Draws the chips
+  drawChip(200,900,#345678);
+  drawChip(400,900,#345678);
+  
+  //Checks balance
+  if(dist( mouseX , mouseY, 200, 900 ) < 40 )
+    text("$" + steve.chipsAsCash(),300,750);
+  if(dist( mouseX , mouseY, 400, 900 ) < 40 )
+    text("$" + steve.chipsAsCash(),300,750);
 }
 
 boolean dealCardTo(Player p)  //make this deal to p instead of steve
@@ -142,6 +199,8 @@ boolean dealCardTo(Player p)  //make this deal to p instead of steve
   deck.card.remove(rand);
 
   return true;
+  
+
 }
 
 void mousePressed()
@@ -149,16 +208,19 @@ void mousePressed()
   println(mouseX+" "+mouseY);
 
 
+  //Allows player to click on the deck and deosnt 
   if ( mouseX > width-300
     && mouseX < width-100
     && mouseY > height-450
     && mouseY < height - 150
     && deck.card.size() > 0
-    && !busted )
+    && !busted 
+    && !handOver)
   {
 
-    dealCardTo( steve );
+  dealCardTo( steve );
   cardEffect.play();
+  steve.chipsAsCash();
   }
   if( mouseX > 150
     && mouseX < 225
@@ -173,18 +235,39 @@ void mousePressed()
   
   if(stayed == true)
     println(steve.handValue());
+    
 }
 
 void keyPressed()
 {
-    if(key == 'w')
-    text( "you stayed with:", 500,450);
-  if(key == 'w')
-    println(steve.handValue());
+
   if (key == 'a')
     println(deck.card);
   if (key == 'b')
     println(steve.hand);
-  //if(key == 'r')
-    
+  if (key == 'i')
+  steve.chipRed -= 1;
+  if (key == 'u')
+  steve.chipBrown -= 1;
+  if (key == 'o')
+  steve.chipGreen -= 1;  
+  if (key == 'p')
+  steve.chipBlack -= 1;
+}
+
+void keyReleased()
+{
+
+}
+void drawChip( float x, float y, color c )
+{
+  push(); if (key == 'r')
+
+  imageMode(CENTER);
+  image(c1, x, y, 100,100 );
+  
+  tint(c);
+  
+  image(c2, x, y, 100,100 );
+  pop();
 }
