@@ -123,10 +123,11 @@ void draw()
       text ("aww you kinda suck NGL", 400,400);
     }
   }
-
+  
+  //Draws the cards on the sceen 
   for (int i = 0; i < steve.hand.size(); i++)
     steve.hand.get(i).drawCard(100+200*i,150);    
-
+    
   fill(0);
 
   text( deck.card.size(), width-200, 900);
@@ -135,8 +136,7 @@ void draw()
   //Stay Button
   rectMode(CORNER);
   
-  //this box marks the click area to end the hand
-  //rect(120, 450 ,75, 50);
+  //Moneycat is the icon to stay
   image(moneyCat,160, 470);
   //Dealer drawing cards
   if( stayed )
@@ -147,26 +147,47 @@ void draw()
       println(dealer.handValue());
     }
     
-    //prints loss on clicking money cat
-    
-    //LOSS
-     if (dealer.handValue() > steve.handValue())
-       text("loss",400,400);
+    //How you won
+  if(dealer.handValue() > 21)
+  {
+       text("win dealer busted",400,400);
          handOver = true;
-           gameState = -1;
-     if (dealer.handValue() >= 22)
-       gameState  = -1;
-    //WIN
-     if (dealer.handValue() < steve.handValue())
+           gameState = 1;
+  }
+
+  else if (dealer.handValue() > steve.handValue())
+  {
+    text("loss",400,400);
+      handOver = true;
+        gameState = -1;
+  }
+  else if(steve.handValue() > 21 )
+  {
+    text("loss you bust",400,400);
+      handOver = true;
+       busted = true;
+        gameState = -1;
+  }
+  else if(dealer.handValue() < steve.handValue())
+  {
        text("win",400,400);
          handOver = true;
            gameState = 1;
-    //TIE
-     if (dealer.handValue() == steve.handValue())
-       text("Tie",400,400);
+  }
+
+  else
+       text("tie",400,400);
          handOver = true;
            gameState = 0;
-     
+
+//Win,loss or tie
+     if (gameState == 1)
+       text("win",400,550);
+     else if(gameState == -1)
+       text("loss",400,550);
+     else if(gameState == 0)
+       text("tie",400,550);
+       
 
   }
   
