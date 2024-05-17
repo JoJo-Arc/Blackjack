@@ -3,7 +3,7 @@
 //Green chips – $25.
 //Black chips – $100.
 
-class Player
+ class Player
 {
   ArrayList<Card> hand = new ArrayList<Card>();
   String namePlayer;

@@ -31,7 +31,8 @@ boolean busted;
 boolean stayed;
 boolean handOver;
 
-int gameState;
+int ante;
+int endState;
 
 
 import processing.sound.*;
@@ -68,6 +69,8 @@ void setup()
   c1 = loadImage("chipWhite.png");
   c2 = loadImage("chipColor.png");
 
+  loadGame();
+
 
   deck.fill52CardDeck();
   print(deck.card);
@@ -82,7 +85,18 @@ void setup()
   //sound
   cardEffect = new SoundFile(this, "CardSoundEffect.wav");
   
-  //String WhiteChip = chipWhite;
+  if( !stayed == true && !busted == true )
+    {
+      ante = 1;
+        endState = 0;
+    }
+    
+  if( stayed == true || busted == true )
+    {
+      ante = 0;
+        endState = 1;
+    }
+
 }
 void draw()
 {
@@ -120,7 +134,9 @@ void draw()
     if( noAces )
     {
       busted = true;
-      text ("aww you kinda suck NGL", 400,400);
+          text("loss you bust",400,400);
+            busted = true;
+              endState = -1;
     }
   }
   
@@ -152,42 +168,55 @@ void draw()
   {
        text("win dealer busted",400,400);
          handOver = true;
-           gameState = 1;
+           endState = 1;
+             saveGame();
   }
 
   else if (dealer.handValue() > steve.handValue())
   {
     text("loss",400,400);
       handOver = true;
-        gameState = -1;
+        endState = -1;
+          saveGame();
   }
-  else if(steve.handValue() > 21 )
-  {
-    text("loss you bust",400,400);
-      handOver = true;
-       busted = true;
-        gameState = -1;
-  }
+  //else if(busted = true )
+  //{
+  //  text("loss you bust",400,400);
+  
+  //     busted = true;
+  //      gameState = -1;
+  //}
   else if(dealer.handValue() < steve.handValue())
   {
        text("win",400,400);
          handOver = true;
-           gameState = 1;
+           endState = 1;
+             saveGame();
   }
 
   else
+  {
        text("tie",400,400);
          handOver = true;
-           gameState = 0;
-
+           endState = 0;
+             saveGame();
+  }
 //Win,loss or tie
-     if (gameState == 1)
+     if (endState == 1)
+     {
        text("win",400,550);
-     else if(gameState == -1)
+         steve.chipGreen -= 1;  
+     }
+     else if(endState == -1)
+     {
        text("loss",400,550);
-     else if(gameState == 0)
+         steve.chipGreen -= 1;
+     }
+     else if(endState == 0)
+     {
        text("tie",400,550);
-       
+     }
+     println( steve.chipGreen );
 
   }
   
@@ -266,14 +295,18 @@ void keyPressed()
     println(deck.card);
   if (key == 'b')
     println(steve.hand);
-  if (key == 'i')
-  steve.chipRed -= 1;
+  if (key == 'i' || ante == 1)
+   {  steve.chipRed -= 1;}
   if (key == 'u')
   steve.chipBrown -= 1;
   if (key == 'o')
   steve.chipGreen -= 1;  
   if (key == 'p')
   steve.chipBlack -= 1;
+
+  //pressing this saves game
+  if (key == 'e')
+    saveGame();
 }
 
 void keyReleased()
@@ -291,4 +324,47 @@ void drawChip( float x, float y, color c )
   
   image(c2, x, y, 100,100 );
   pop();
+}
+void saveGame()
+{
+  try
+  {
+    //use a PrintWriter to send your information to a chosen file
+    PrintWriter pw = createWriter( "save.txt" );
+    pw.println( steve.chipBrown );
+    pw.println( steve.chipRed );
+    pw.println( steve.chipGreen );
+    pw.println( steve.chipBlack );
+    
+    pw.flush(); //Writes the remaining data to the file
+    pw.close(); //Finishes the file
+  }
+  catch(Exception e)
+  {
+    println("SOMETHING WENT WRONG");
+  }
+}
+
+void loadGame()
+{
+  
+  try
+  {
+    //use the loadStrings() method to pull the lines of your save file into a String array
+    String [] data = loadStrings("save.txt");
+    steve.chipBrown = Integer.parseInt(data[0]);
+    steve.chipRed = Integer.parseInt(data[1]);
+    steve.chipGreen = Integer.parseInt(data[2]);
+    steve.chipBlack = Integer.parseInt(data[3]);
+  }
+  catch(Exception e)
+  {
+    println("SOMETHING WENT WRONG");
+    
+    //Loads default data
+    steve.chipBrown = 1;
+    steve.chipRed = 1;
+    steve.chipGreen = 0;
+    steve.chipBlack = 0;
+  }
 }
