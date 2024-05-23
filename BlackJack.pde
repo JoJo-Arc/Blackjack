@@ -23,6 +23,7 @@ PImage moneyCat;
 PImage c1, c2;
 
 
+//The deck and dealer and player
 Deck deck = new Deck();
 Player steve = new Player();
 Player dealer = new Player();
@@ -31,6 +32,7 @@ boolean busted;
 boolean stayed;
 boolean handOver;
 
+//different states of the game
 int ante;
 int endState;
 
@@ -101,7 +103,7 @@ void setup()
 void draw()
 {
 
-    
+   // prints the playing table
   image(greenFelt,600,500);
   //background(#05F532);
   //Draw pile
@@ -187,7 +189,7 @@ void draw()
   //      gameState = -1;
   //}
   else if(dealer.handValue() < steve.handValue())
-  {
+  {    //
        text("win",400,400);
          handOver = true;
            endState = 1;
@@ -195,7 +197,8 @@ void draw()
   }
 
   else
-  {
+  {    
+       //this ties the game
        text("tie",400,400);
          handOver = true;
            endState = 0;
@@ -309,10 +312,7 @@ void keyPressed()
     saveGame();
 }
 
-void keyReleased()
-{
-
-}
+//draws the token 
 void drawChip( float x, float y, color c )
 {
   push(); if (key == 'r')
@@ -325,6 +325,7 @@ void drawChip( float x, float y, color c )
   image(c2, x, y, 100,100 );
   pop();
 }
+//saving the game funtion 
 void saveGame()
 {
   try
@@ -339,6 +340,7 @@ void saveGame()
     pw.flush(); //Writes the remaining data to the file
     pw.close(); //Finishes the file
   }
+  //if something goes wrong it then loads a starter set
   catch(Exception e)
   {
     println("SOMETHING WENT WRONG");
